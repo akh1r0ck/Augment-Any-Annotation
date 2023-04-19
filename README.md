@@ -1,6 +1,6 @@
 # # A<sup>3</sup> (Augument Any Annotations): Inpaint Anything Meets Object Detection Annotation
 
-Institutes : Kyushu Institute of Technology in Japan
+<b>Nonpublished Technology</b>
 
 TL; DR: This is perfectly overwrap of Inpaint Anything. Users can set annotation file and augument annotations by segmentation of SAM and inpainting of SD.
 
