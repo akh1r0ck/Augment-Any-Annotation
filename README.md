@@ -18,10 +18,13 @@ Original Repos as below.
 </p>
  
  ## Installation
- `
+ 
+ Details are on each original repos.
+
+ ```bash
  conda create -n a3 python=3.9
  conda activate a3
  conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
  pip install git+https://github.com/facebookresearch/segment-anything.git
  python -m pip install diffusers transformers accelerate scipy safetensors
- `
+ ```
