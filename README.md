@@ -18,7 +18,13 @@ Original Repos as below.
 </p>
  
  ## Installation
- 
+
+ ```bash
+ git clone 
+ cd 
+ ```
+
+
  Details are on each original repos.
 
  ```bash
