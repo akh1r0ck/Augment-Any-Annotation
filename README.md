@@ -2,7 +2,7 @@
 
 <b>Nonpublished Technology</b>
 
-TL; DR: This is perfectly overwrap of Inpaint Anything. Users can set annotation file and augument annotations by segmentation of SAM and inpainting of SD.
+TL; DR: This is a customised version of Inpaint Anything. Users can set annotation file and augument annotations by segmentation of SAM and inpainting of SD.
 
 Original Repos as below.
 
