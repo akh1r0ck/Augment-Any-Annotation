@@ -19,9 +19,11 @@ Original Repos as below.
  
  ## Installation
 
+ Cloning files.
+ 
  ```bash
- git clone 
- cd 
+ git clone https://github.com/akh1r0ck/Augument-Any-Annotation.git
+ cd Augument-Any-Annotation/src
  ```
 
 
