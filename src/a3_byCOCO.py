@@ -3,6 +3,7 @@ import sys
 import argparse
 import json
 import numpy as np
+import os
 from copy import deepcopy
 import torch
 from pathlib import Path
@@ -60,9 +61,9 @@ def show_points(ax, coords: List[List[float]], labels: List[int], size=375):
         ax.scatter(points[:, 0], points[:, 1], color=color, marker='*',
                 s=size, edgecolor='white', linewidth=1.25)
 
-
 def arg_parse():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset-desc", type=int, default=32)
     parser.add_argument("--dataset-desc", type=str, default="natural scene")
     parser.add_argument("--dilate-kernel-size", type=int, default=50)
     parser.add_argument("--sam-model-type", type=str, choices=['vit_h', 'vit_l', 'vit_b'], default="vit_h")
@@ -77,13 +78,13 @@ def arg_parse():
 
 if __name__ == "__main__":
     """for developper command
-    python a3_SingleImage_byCOCO.py \
+    python a3_byCOCO.py \
         --dataset-desc animal \
         --sam-ckpt ../../sam_local/segment-anything-main/ckpt/sam_vit_h_4b8939.pth \
-        --annotation-path ./annotations_1.json
+        --annotation-path ./ob2_img3/annotations.json
     """
-
     args = arg_parse()
+
     # Argments
     dataset_desc = args.dataset_desc
     dilate_kernel_size = args.dilate_kernel_size
@@ -93,16 +94,19 @@ if __name__ == "__main__":
     cornor_num = args.cornor_num
     seed = args.seed
 
+    
+    path_working = Path(annotation_path)
+    annotation_file_name = path_working.name
+    prefix_anno = str(path_working.parent)
+    
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # get json path form image path, provided that they are the same file name
     json_open = open(annotation_path, "r")
-    
-    # load json = annotation data
+    # load json
     json_load = json.load(json_open)
-    
-    # augmented annotation data
+
     new_json = deepcopy(json_load)
 
     # analyze annotation data
@@ -127,104 +131,104 @@ if __name__ == "__main__":
             last_anno_id=annotation["id"]
 
 
+
     image_ids = list(imageId_annoInfo.keys())
-    
     # image loop
-    image_id = image_ids[0]
-    # get annotation information using image id
-    annotations = imageId_annoInfo[image_id]
+    for image_id in image_ids:
+        # get annotation information using image id
+        annotations = imageId_annoInfo[image_id]
 
-    # image_id = annotation["image_id"]    
-    image_name = imageId_imageInfo[image_id]["file_name"]
+        image_name = imageId_imageInfo[image_id]["file_name"]
 
-    ag_image_name = image_name.replace(".", "_ag.")
-    # annotation information loop in an image 
-    for anno_id, annotation in enumerate(annotations):
-        if anno_id==0: # original image
-            input_img = image_name
-        else: # overwrite on augmented image
-            input_img = ag_image_name
+        # define ag image name
+        name = Path(image_name).stem
+        ext = Path(image_name).suffix
+        prefix_img = str(Path(image_name).parent)
+        ag_image_name = name + "_ag" + ext
 
-        # get bbox information
-        x, y, w, h = xywh2center(annotation["bbox"])
-
-        # get class id
-        class_id = annotation["category_id"]
-        # get class name
-        class_name = category_names[class_id]
-        
-        # get each points; object and background
-        point_coords, point_labels = get_coords(x, y, cornor_num)
-
-        # set prompt for SD
-        text_prompt = f"{class_name} in the context of {dataset_desc}"
-
-        # load image
-        img = load_img_to_array(input_img)
-
-        # SAM prediction
-        masks, scores, _ = predict_masks_with_sam(
-            img,
-            point_coords,
-            point_labels,
-            model_type=sam_model_type,
-            ckpt_p=sam_ckpt,
-            device=device,
-        )
-        maximum_index = np.argmax(scores)
-        masks = masks.astype(np.uint8) * 255
-
-        # dilate mask to avoid unmasked edge effect
-        if dilate_kernel_size is not None:
-            masks = [dilate_mask(mask, dilate_kernel_size) for mask in masks]
+        # set prefix
+        image_name = os.path.join(prefix_anno, image_name)
+        ag_image_path = os.path.join(prefix_anno, prefix_img, ag_image_name)
 
 
-        # get maximum sroced mask
-        idx = maximum_index; mask = masks[idx]
+        # annotation information loop in an image 
+        for anno_id, annotation in enumerate(annotations):
+            if anno_id==0: # original image
+                input_img = image_name
+            else: # overwrite on augmented image
+                input_img = ag_image_path
 
 
-        # for confirmation
-        # save the mask
-        save_array_to_img(mask, image_name.replace(".", f"_{anno_id}_mask."))
+            # get bbox information
+            x, y, w, h = xywh2center(annotation["bbox"])
 
-        # save the pointed and masked image
-        dpi = plt.rcParams['figure.dpi']
-        height, width = img.shape[:2]
-        # with point
-        plt.figure(figsize=(width/dpi/0.77, height/dpi/0.77))
-        plt.imshow(img)
-        plt.axis('off')
-        show_points(plt.gca(), [point_coords], point_labels,
-                    size=(width*0.04)**2)
-        plt.savefig(image_name.replace(".", f"_{anno_id}_withPoints."), bbox_inches='tight', pad_inches=0)
-        
-        # with mask
-        show_mask(plt.gca(), mask, random_color=False)
-        plt.savefig(image_name.replace(".", f"_{anno_id}_withMask."), bbox_inches='tight', pad_inches=0)
-        plt.close()
+            # get class id
+            class_id = annotation["category_id"]
+            # get class name
+            class_name = category_names[class_id]
+            
+            # get each points; object and background
+            point_coords, point_labels = get_coords(x, y, cornor_num)
 
-        # inpainitng        
-        if seed==1814141513:
-            seed = random.randint(0, 512)
-            torch_fix_seed(seed)
-        img_filled = fill_img_with_sd(
-            img, mask, text_prompt, device=device)
-        save_array_to_img(img_filled, ag_image_name)
+            # set prompt for SD
+            text_prompt = f"{class_name} in the context of {dataset_desc}"
+
+            # load image
+            img = load_img_to_array(input_img)
+
+            # SAM prediction
+            masks, scores, _ = predict_masks_with_sam(
+                img,
+                point_coords,
+                point_labels,
+                model_type=sam_model_type,
+                ckpt_p=sam_ckpt,
+                device=device,
+            )
+            maximum_index = np.argmax(scores)
+            masks = masks.astype(np.uint8) * 255
+
+            # dilate mask to avoid unmasked edge effect
+            if dilate_kernel_size is not None:
+                masks = [dilate_mask(mask, dilate_kernel_size) for mask in masks]
 
 
-        # add annotation information
-        last_anno_id+=1
-        new_annoInfo = deepcopy(annotation)
-        new_annoInfo["id"] = last_anno_id
-        new_annoInfo["image_id"] = last_image_id+1
-        new_json["annotations"].append(new_annoInfo)
+            # get maximum sroced mask
+            idx = maximum_index; mask = masks[idx]
 
-    # add image information
-    last_image_id += 1
-    new_imageInfo = deepcopy(imageId_imageInfo[image_id])
-    new_imageInfo["id"] = last_image_id
-    new_imageInfo["file_name"] = ag_image_name
-    new_json["images"].append(new_imageInfo)
+            # save the pointed and masked image
+            dpi = plt.rcParams['figure.dpi']
+            # for confirmation
+            height, width = img.shape[:2]
+            plt.figure(figsize=(width/dpi/0.77, height/dpi/0.77))
+            plt.imshow(img)
+            plt.axis('off')
+            show_points(plt.gca(), [point_coords], point_labels,
+                        size=(width*0.04)**2)
+            img_points_p = os.path.join(prefix_anno, name + f"_ag_{anno_id}" + ext)
+            plt.savefig(img_points_p, bbox_inches='tight', pad_inches=0)
+            
+            # fill the masked image
+            torch_fix_seed(200)
+            img_filled = fill_img_with_sd(
+                img, mask, text_prompt, device=device)
+            save_array_to_img(img_filled, ag_image_path)
 
-    with open(annotation_path.replace(".json", "_ag.json"), mode="w") as F:
+            # add annotation information
+            last_anno_id+=1
+            new_annoInfo = deepcopy(annotation)
+            new_annoInfo["id"] = last_anno_id
+            new_annoInfo["image_id"] = last_image_id+1
+            new_json["annotations"].append(new_annoInfo)
+
+        # add image information
+        last_image_id += 1
+        new_imageInfo = deepcopy(imageId_imageInfo[image_id])
+        new_imageInfo["id"] = last_image_id
+        new_imageInfo["file_name"] = os.path.join(prefix_img, ag_image_name)
+        new_json["images"].append(new_imageInfo)
+
+    with open(f"{prefix_anno}/annotations_ag.json", mode="w") as F:
         json.dump(new_json, F, indent=4)
+
+
