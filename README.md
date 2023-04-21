@@ -55,4 +55,11 @@ Original Repos as below.
         --dataset-desc animal \
         --sam-ckpt ./sam_vit_h_4b8939.pth \
         --annotation-path ./annotations.json
+        --seed 42
  ```
+
+ You get images as below
+
+<p align="center">
+  <img src="./assets/a3_single.png" width="100%">
+</p>
