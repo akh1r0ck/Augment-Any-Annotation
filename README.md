@@ -99,6 +99,6 @@ Inpainting seems to be failed in at least these cases.
 - Objjets are duplicated
 
 <p align="center">
-  <img src="./assets/a3_single.png" width="100%">
+  <img src="./assets/a3_failed.png" width="100%">
 </p>
 
