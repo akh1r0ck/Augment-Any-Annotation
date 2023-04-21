@@ -53,6 +53,6 @@ Original Repos as below.
  ```bash
  python a3_SingleImage_byCOCO.py \
         --dataset-desc animal \
-        --sam-ckpt ./segment-anything-main/ckpt/sam_vit_h_4b8939.pth \
+        --sam-ckpt ./sam_vit_h_4b8939.pth \
         --annotation-path ./annotations.json
  ```
