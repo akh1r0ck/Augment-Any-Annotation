@@ -1,0 +1,166 @@
+{
+    "info": {
+        "description": null,
+        "url": null,
+        "version": null,
+        "year": 2023,
+        "contributor": null,
+        "date_created": "2023-04-21 13:28:32.311578"
+    },
+    "licenses": [
+        {
+            "url": null,
+            "id": 0,
+            "name": null
+        }
+    ],
+    "images": [
+        {
+            "license": "techno.send",
+            "url": null,
+            "file_name": "images/00000000.jpg",
+            "height": 1076,
+            "width": 1920,
+            "date_captured": null,
+            "id": 0
+        },
+        {
+            "license": "techno.send",
+            "url": null,
+            "file_name": "images/00000001.jpg",
+            "height": 1280,
+            "width": 1920,
+            "date_captured": null,
+            "id": 1
+        },
+        {
+            "license": "techno.send",
+            "url": null,
+            "file_name": "images/00000002.jpg",
+            "height": 1280,
+            "width": 1920,
+            "date_captured": null,
+            "id": 2
+        },
+        {
+            "license": "techno.send",
+            "url": null,
+            "file_name": "images/00000003.jpg",
+            "height": 1076,
+            "width": 1920,
+            "date_captured": null,
+            "id": 3
+        },
+        {
+            "license": "techno.send",
+            "url": null,
+            "file_name": "images/00000004.jpg",
+            "height": 1280,
+            "width": 1920,
+            "date_captured": null,
+            "id": 4
+        },
+        {
+            "license": "techno.send",
+            "url": null,
+            "file_name": "images/00000005.jpg",
+            "height": 1280,
+            "width": 1920,
+            "date_captured": null,
+            "id": 5
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "id": 0,
+            "image_id": 0,
+            "category_id": 1,
+            "area": 238602,
+            "bbox": [
+                356,
+                506,
+                494,
+                483
+            ],
+            "iscrowd": 0
+        },
+        {
+            "id": 1,
+            "image_id": 1,
+            "category_id": 1,
+            "area": 127206,
+            "bbox": [
+                1338,
+                909,
+                382,
+                333
+            ],
+            "iscrowd": 0
+        },
+        {
+            "id": 2,
+            "image_id": 2,
+            "category_id": 1,
+            "area": 227880,
+            "bbox": [
+                434,
+                285,
+                540,
+                422
+            ],
+            "iscrowd": 0
+        },
+        {
+            "id": 3,
+            "image_id": 3,
+            "category_id": 2,
+            "area": 646878,
+            "bbox": [
+                747,
+                253,
+                786,
+                823
+            ],
+            "iscrowd": 0
+        },
+        {
+            "id": 4,
+            "image_id": 4,
+            "category_id": 2,
+            "area": 564400,
+            "bbox": [
+                0,
+                0,
+                850,
+                664
+            ],
+            "iscrowd": 0
+        },
+        {
+            "id": 5,
+            "image_id": 5,
+            "category_id": 2,
+            "area": 518056,
+            "bbox": [
+                806,
+                459,
+                638,
+                812
+            ],
+            "iscrowd": 0
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "CustomData",
+            "id": 1,
+            "name": "cat"
+        },
+        {
+            "supercategory": "CustomData",
+            "id": 2,
+            "name": "dog"
+        }
+    ]
+}

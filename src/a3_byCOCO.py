@@ -63,14 +63,14 @@ def show_points(ax, coords: List[List[float]], labels: List[int], size=375):
 
 def arg_parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset-desc", type=int, default=32)
-    parser.add_argument("--dataset-desc", type=str, default="natural scene")
+    parser.add_argument("--dataset-desc", type=str, default="natural scene", required=True)
     parser.add_argument("--dilate-kernel-size", type=int, default=50)
     parser.add_argument("--sam-model-type", type=str, choices=['vit_h', 'vit_l', 'vit_b'], default="vit_h")
-    parser.add_argument("--sam-ckpt", type=str)
-    parser.add_argument("--annotation-path", type=str)
+    parser.add_argument("--sam-ckpt", type=str, required=True)
+    parser.add_argument("--annotation-path", type=str, required=True)
     parser.add_argument("--cornor-num", type=int, choices=[4, 8], default=4)
     parser.add_argument("--seed", type=int, default=1814141513)
+    parser.add_argument("--debug", action="store_true")
 
     return parser.parse_args()
 
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     python a3_byCOCO.py \
         --dataset-desc animal \
         --sam-ckpt ../../sam_local/segment-anything-main/ckpt/sam_vit_h_4b8939.pth \
-        --annotation-path ./ob2_img3/annotations.json
+        --annotation-path ./ob2_img3/annotations.json 
     """
     args = arg_parse()
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     cornor_num = args.cornor_num
     seed = args.seed
 
-    
+
     path_working = Path(annotation_path)
     annotation_file_name = path_working.name
     prefix_anno = str(path_working.parent)
@@ -198,18 +198,21 @@ if __name__ == "__main__":
 
             # save the pointed and masked image
             dpi = plt.rcParams['figure.dpi']
-            # for confirmation
-            height, width = img.shape[:2]
-            plt.figure(figsize=(width/dpi/0.77, height/dpi/0.77))
-            plt.imshow(img)
-            plt.axis('off')
-            show_points(plt.gca(), [point_coords], point_labels,
-                        size=(width*0.04)**2)
-            img_points_p = os.path.join(prefix_anno, name + f"_ag_{anno_id}" + ext)
-            plt.savefig(img_points_p, bbox_inches='tight', pad_inches=0)
+            if args.debug:
+                # for confirmation
+                height, width = img.shape[:2]
+                plt.figure(figsize=(width/dpi/0.77, height/dpi/0.77))
+                plt.imshow(img)
+                plt.axis('off')
+                show_points(plt.gca(), [point_coords], point_labels,
+                            size=(width*0.04)**2)
+                img_points_p = os.path.join(prefix_anno, name + f"_ag_{anno_id}" + ext)
+                plt.savefig(img_points_p, bbox_inches='tight', pad_inches=0)
             
             # fill the masked image
-            torch_fix_seed(200)
+            if seed==1814141513:
+                seed = random.randint(0, 512)
+                torch_fix_seed(seed)
             img_filled = fill_img_with_sd(
                 img, mask, text_prompt, device=device)
             save_array_to_img(img_filled, ag_image_path)

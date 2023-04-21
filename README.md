@@ -3,7 +3,7 @@
 <b>Nonpublished Technology</b>
 
 TL; DR: This is a customised version of Inpaint Anything. Users can set annotation file and augment annotations by segmentation of SAM and inpainting of SD.  
-So, `src` directory of this repo stores Inpaint Anythin.
+So, `src` directory of this repo stores Inpaint Anything.
 
 Original Repos as below.
 
@@ -23,43 +23,73 @@ Original Repos as below.
   <img src="./assets/a3.png" width="100%">
 </p>
 
- ## Installation
+## Installation
 
- Cloning files.
- 
- ```bash
- git clone https://github.com/akh1r0ck/Augment-Any-Annotation.git
- cd Augment-Any-Annotation/src
- ```
+Cloning files.
+
+```bash
+git clone https://github.com/akh1r0ck/Augment-Any-Annotation.git
+cd Augment-Any-Annotation/src
+```
 
 
- Details are on each original repos.
+Details are on each original repos.
 
- ```bash
- conda create -n a3 python=3.9
- conda activate a3
- conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
- pip install git+https://github.com/facebookresearch/segment-anything.git
- python -m pip install diffusers transformers accelerate scipy safetensors
- ```
- 
- Download SAM model
- ```
- wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
- ```
- 
+```bash
+conda create -n a3 python=3.9
+conda activate a3
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+pip install git+https://github.com/facebookresearch/segment-anything.git
+python -m pip install diffusers transformers accelerate scipy safetensors
+```
+
+Download SAM model
+```
+wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
+```
+
 ### Verify the installation
- 
- ```bash
- python a3_SingleImage_byCOCO.py \
-        --dataset-desc animal \
-        --sam-ckpt ./sam_vit_h_4b8939.pth \
-        --annotation-path ./annotations.json
-        --seed 42
- ```
 
- You get images as below
+```bash
+python a3_SingleImage_byCOCO.py \
+      --dataset-desc animal \
+      --sam-ckpt ./sam_vit_h_4b8939.pth \
+      --annotation-path ./annotations.json
+      --seed 42
+```
+
+ You get images as below.
 
 <p align="center">
   <img src="./assets/a3_single.png" width="100%">
 </p>
+
+## Usage
+
+Basic command with minimum arguments.
+
+```bash
+python a3_byCOCO.py \
+    --dataset-desc animal \
+    --sam-ckpt ../../sam_local/segment-anything-main/ckpt/sam_vit_h_4b8939.pth \
+    --annotation-path ../examples/annotations.json \
+    --debug
+```
+
+- dataset-desc : dataset description that 
+- sam-ckpt : SAM checkpoint path
+- annotation-path : annotation file path
+
+### Dataset description 
+
+Prompt for SD to generate object be inpainted is as below, using class name (refer from annotation file) and a dataset description (refer from arguments).
+
+```
+{class_name} in the context of {dataset_desc}
+```
+
+### Anti-Pttern
+
+If objects are upside down, inpainting seems to be failed.
+
+

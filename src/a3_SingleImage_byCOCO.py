@@ -63,11 +63,11 @@ def show_points(ax, coords: List[List[float]], labels: List[int], size=375):
 
 def arg_parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset-desc", type=str, default="natural scene")
+    parser.add_argument("--dataset-desc", type=str, default="natural scene", required=True)
     parser.add_argument("--dilate-kernel-size", type=int, default=50)
     parser.add_argument("--sam-model-type", type=str, choices=['vit_h', 'vit_l', 'vit_b'], default="vit_h")
-    parser.add_argument("--sam-ckpt", type=str)
-    parser.add_argument("--annotation-path", type=str)
+    parser.add_argument("--sam-ckpt", type=str, required=True)
+    parser.add_argument("--annotation-path", type=str, required=True)
     parser.add_argument("--cornor-num", type=int, choices=[4, 8], default=4)
     parser.add_argument("--seed", type=int, default=1814141513)
 
