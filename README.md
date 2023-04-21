@@ -1,8 +1,8 @@
-# A<sup>3</sup> (Augument Any Annotations): Inpaint Anything Meets Object Detection Annotation
+# A<sup>3</sup> (Augment Any Annotations): Inpaint Anything Meets Object Detection Annotation
 
 <b>Nonpublished Technology</b>
 
-TL; DR: This is a customised version of Inpaint Anything. Users can set annotation file and augument annotations by segmentation of SAM and inpainting of SD.
+TL; DR: This is a customised version of Inpaint Anything. Users can set annotation file and augment annotations by segmentation of SAM and inpainting of SD.
 
 Original Repos as below.
 
@@ -22,8 +22,8 @@ Original Repos as below.
  Cloning files.
  
  ```bash
- git clone https://github.com/akh1r0ck/Augument-Any-Annotation.git
- cd Augument-Any-Annotation/src
+ git clone https://github.com/akh1r0ck/Augment-Any-Annotation.git
+ cd Augment-Any-Annotation/src
  ```
 
 
