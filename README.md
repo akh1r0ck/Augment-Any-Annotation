@@ -88,8 +88,17 @@ Prompt for SD to generate object be inpainted is as below, using class name (ref
 {class_name} in the context of {dataset_desc}
 ```
 
+In this exmaple class name is cat and dog, and dataset_desc is animal.
+So, prompt is like `cat is the context of animal` when an annotation data for cat class annotation is focused.
+
 ### Anti-Pttern
 
-If objects are upside down, inpainting seems to be failed.
+Inpainting seems to be failed in at least these cases.
 
+- Objects are upside down
+- Objjets are duplicated
+
+<p align="center">
+  <img src="./assets/a3_single.png" width="100%">
+</p>
 
