@@ -2,7 +2,9 @@
 
 <b>Nonpublished Technology</b>
 
-TL; DR: This is a customised version of Inpaint Anything. Users can set annotation file and augment annotations by segmentation of SAM and inpainting of SD.
+TL; DR: This is a customised version of Inpaint Anything. Users can set annotation file and augment annotations by segmentation of SAM and inpainting of SD.  
+
+The src directory of this repo stores Inpaint Anythin.
 
 Original Repos as below.
 

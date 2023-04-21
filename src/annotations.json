@@ -1,0 +1,51 @@
+{
+    "info": {
+        "description": null,
+        "url": null,
+        "version": null,
+        "year": 2023,
+        "contributor": null,
+        "date_created": "2023-04-20 02:11:59.385141"
+    },
+    "licenses": [
+        {
+            "url": null,
+            "id": 0,
+            "name": null
+        }
+    ],
+    "images": [
+        {
+            "license": "techno.send",
+            "url": null,
+            "file_name": "00000000.jpg",
+            "height": 1076,
+            "width": 1920,
+            "date_captured": null,
+            "id": 0
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "id": 0,
+            "image_id": 0,
+            "category_id": 1,
+            "area": 260064,
+            "bbox": [
+                801,
+                559,
+                504,
+                516
+            ],
+            "iscrowd": 0
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "CustomData",
+            "id": 1,
+            "name": "cat"
+        }
+    ]
+}
