@@ -36,3 +36,17 @@ Original Repos as below.
  pip install git+https://github.com/facebookresearch/segment-anything.git
  python -m pip install diffusers transformers accelerate scipy safetensors
  ```
+ 
+ Download SAM model
+ ```
+ wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
+ ```
+ 
+### Verify the installation
+ 
+ ```bash
+ python a3_SingleImage_byCOCO.py \
+        --dataset-desc animal \
+        --sam-ckpt ./segment-anything-main/ckpt/sam_vit_h_4b8939.pth \
+        --annotation-path ./annotations.json
+ ```
