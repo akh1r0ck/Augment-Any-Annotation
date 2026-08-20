@@ -78,7 +78,7 @@ There are three options of an environment:
     conda env create -f conda_env.yml
     conda activate lama
     conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch -y
-    pip install pytorch-lightning==1.2.9
+    pip install pytorch-lightning~=1.6.0
     ```
  
 3. Docker: No actions are needed 🎉.
