@@ -28,7 +28,7 @@ RUN wget -O /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-py3
 
 RUN pip install -U pip
 RUN pip install numpy scipy torch==1.8.1 torchvision opencv-python tensorflow joblib matplotlib pandas \
-    albumentations==0.5.2 pytorch-lightning==1.2.9 tabulate easydict==1.9.0 kornia==0.5.0 webdataset \
+    albumentations==0.5.2 pytorch-lightning~=1.6.0 tabulate easydict==1.9.0 kornia==0.5.0 webdataset \
     packaging gpustat tqdm pyyaml hydra-core==1.1.0.dev6 scikit-learn==0.24.2 tabulate
 RUN pip install scikit-image==0.17.2
 
