@@ -23,7 +23,7 @@ losses:
   resnet_pl:
     arch_encoder: resnet50
     weight: 30
-    weights_path: ${env:TORCH_HOME}
+    weights_path: ${oc.env:TORCH_HOME}
 
 defaults:
   - location: docker

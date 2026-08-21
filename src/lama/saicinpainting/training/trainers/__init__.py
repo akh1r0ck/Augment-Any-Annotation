@@ -14,7 +14,7 @@ def make_training_model(config):
     kind = config.training_model.kind
     kwargs = dict(config.training_model)
     kwargs.pop('kind')
-    kwargs['use_ddp'] = config.trainer.kwargs.get('accelerator', None) == 'ddp'
+    kwargs['use_ddp'] = config.trainer.kwargs.get('strategy', None) == 'ddp'
 
     logging.info(f'Make training model {kind}')
 

@@ -1,8 +1,8 @@
-FROM nvidia/cuda:10.2-runtime-ubuntu18.04
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y wget mc tmux nano build-essential rsync libgl1
+    apt-get install -y wget mc tmux nano build-essential rsync libgl1 python3 python3-pip
 
 ARG USERNAME=user
 RUN apt-get install -y sudo && \
@@ -15,22 +15,15 @@ RUN apt-get install -y sudo && \
 
 USER $USERNAME:$USERNAME
 WORKDIR "/home/$USERNAME"
-ENV PATH="/home/$USERNAME/miniconda3/bin:/home/$USERNAME/.local/bin:${PATH}"
+ENV PATH="/home/$USERNAME/.local/bin:${PATH}"
 ENV PYTHONPATH="/home/$USERNAME/project"
 
-RUN wget -O /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-py39_4.9.2-Linux-x86_64.sh && \
-    echo "536817d1b14cb1ada88900f5be51ce0a5e042bae178b5550e62f61e223deae7c /tmp/miniconda.sh" > /tmp/miniconda.sh.sha256 && \
-    sha256sum --check --status < /tmp/miniconda.sh.sha256 && \
-    bash /tmp/miniconda.sh -bt -p "/home/$USERNAME/miniconda3" && \
-    rm /tmp/miniconda.sh && \
-    conda build purge && \
-    conda init
-
-RUN pip install -U pip
-RUN pip install numpy scipy torch==1.8.1 torchvision opencv-python tensorflow joblib matplotlib pandas \
-    albumentations==0.5.2 pytorch-lightning~=1.6.0 tabulate easydict==1.9.0 kornia==0.5.0 webdataset \
-    packaging gpustat tqdm pyyaml hydra-core==1.1.0.dev6 scikit-learn==0.24.2 tabulate
-RUN pip install scikit-image==0.17.2
+RUN python3 -m pip install --user -U pip
+RUN python3 -m pip install --user torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu121
+RUN python3 -m pip install --user numpy~=1.26.0 scipy~=1.13.0 opencv-python~=4.10.0 opencv-python-headless~=4.10.0 tensorflow joblib matplotlib pandas \
+    albumentations==0.5.2 pytorch-lightning~=2.6.1 tabulate easydict==1.9.0 kornia==0.5.0 webdataset \
+    packaging gpustat tqdm pyyaml hydra-core~=1.3.2 scikit-learn==1.5.0 tensorboard tabulate
+RUN python3 -m pip install --user scikit-image~=0.24.0
 
 ENV TORCH_HOME="/home/$USERNAME/.torch"
 
