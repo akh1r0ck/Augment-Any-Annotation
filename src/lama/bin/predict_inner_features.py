@@ -35,7 +35,7 @@ from saicinpainting.utils import register_debug_signal_handlers, get_shape
 LOGGER = logging.getLogger(__name__)
 
 
-@hydra.main(config_path='../configs/prediction', config_name='default_inner_features.yaml')
+@hydra.main(version_base='1.1', config_path='../configs/prediction', config_name='default_inner_features.yaml')
 def main(predict_config: OmegaConf):
     try:
         register_debug_signal_handlers()  # kill -10 <pid> will result in traceback dumped into log

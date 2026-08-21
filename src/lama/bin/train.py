@@ -16,7 +16,6 @@ from omegaconf import OmegaConf
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
-from pytorch_lightning.plugins import DDPPlugin
 
 from saicinpainting.training.trainers import make_training_model
 from saicinpainting.utils import register_debug_signal_handlers, handle_ddp_subprocess, handle_ddp_parent_process, \
@@ -26,7 +25,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 @handle_ddp_subprocess()
-@hydra.main(config_path='../configs/training', config_name='tiny_test.yaml')
+@hydra.main(version_base='1.1', config_path='../configs/training', config_name='big-lama.yaml')
 def main(config: OmegaConf):
     try:
         need_set_deterministic = handle_deterministic_config(config)
@@ -50,17 +49,21 @@ def main(config: OmegaConf):
         training_model = make_training_model(config)
 
         trainer_kwargs = OmegaConf.to_container(config.trainer.kwargs, resolve=True)
+        # Multiple optimizers require manual optimization in Lightning 2.x, where
+        # gradient clipping must be performed by the LightningModule itself.
+        trainer_kwargs.pop('gradient_clip_val', None)
+        ckpt_path = trainer_kwargs.pop('resume_from_checkpoint', None)
         if need_set_deterministic:
             trainer_kwargs['deterministic'] = True
 
         trainer = Trainer(
             # there is no need to suppress checkpointing in ddp, because it handles rank on its own
-            callbacks=ModelCheckpoint(dirpath=checkpoints_dir, **config.trainer.checkpoint_kwargs),
+            callbacks=[ModelCheckpoint(dirpath=checkpoints_dir, **config.trainer.checkpoint_kwargs)],
             logger=metrics_logger,
             default_root_dir=os.getcwd(),
             **trainer_kwargs
         )
-        trainer.fit(training_model)
+        trainer.fit(training_model, ckpt_path=ckpt_path)
     except KeyboardInterrupt:
         LOGGER.warning('Interrupted by user')
     except Exception as ex:

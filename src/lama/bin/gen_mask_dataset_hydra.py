@@ -100,7 +100,7 @@ def process_images(src_images, indir, outdir, config):
             print(f'Could not make masks for {infile} due to {ex}:\n{traceback.format_exc()}')
 
 
-@hydra.main(config_path='../configs/data_gen/whydra', config_name='random_medium_256.yaml')
+@hydra.main(version_base='1.1', config_path='../configs/data_gen/whydra', config_name='random_medium_256.yaml')
 def main(config: OmegaConf):
     if not config.indir.endswith('/'):
         config.indir += '/'

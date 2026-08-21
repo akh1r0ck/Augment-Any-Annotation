@@ -58,9 +58,9 @@ There are three options of an environment:
 1. Python virtualenv:
 
     ```
-    virtualenv inpenv --python=/usr/bin/python3
+    virtualenv inpenv --python=/usr/bin/python3.10
     source inpenv/bin/activate
-    pip install torch==1.8.0 torchvision==0.9.0
+    pip install torch==2.5.1 torchvision==0.20.1
     
     cd lama
     pip install -r requirements.txt 
@@ -77,8 +77,6 @@ There are three options of an environment:
     cd lama
     conda env create -f conda_env.yml
     conda activate lama
-    conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch -y
-    pip install pytorch-lightning~=1.6.0
     ```
  
 3. Docker: No actions are needed 🎉.

@@ -21,7 +21,7 @@ losses:
     weight: 100
   resnet_pl:
     weight: 30
-    weights_path: ${env:TORCH_HOME}
+    weights_path: ${oc.env:TORCH_HOME}
 
 defaults:
   - location: celeba
